@@ -1,0 +1,97 @@
+<!-- MAIN CONTENT -->
+<div class="page-content">
+    <div class="container-fluid">
+        <!-- BEGIN JOBS  TABLE -->
+        <div class="mail-apps-wrap">
+            <div class="the-box bg-success no-border no-margin heading">
+                <div class="row mail-header">
+                    <div class="col-sm-6">
+                        <h1><i class="fa fa-tasks icon-lg icon-circle icon-bordered"></i>Daemon Jobs</h1>
+                    </div><!-- /.col-sm-6 -->
+                    <div class="col-sm-6 text-right">
+                        <!--<button class="btn btn-success btn-sm"><i class="fa fa-cloud-upload"></i></button>-->
+                    </div><!-- /.col-sm-6 -->
+                </div><!-- /.row -->
+            </div>
+
+            <div class="the-box toolbar no-border no-margin">
+                <div class="btn-toolbar" role="toolbar" id ="top_toolbar">
+                    <div class="btn-group" ng-controller="JobCreateCtrl">
+                        <a href="javascript:void(0)"  title="Create New Job" class="btn btn-danger"  ng-click="openModal()" ><i class="fa fa-pencil"></i> New job</a>
+                    </div>
+                    <div class="btn-group" id = "action_top_toolbar">
+                        <button data-toggle="tooltip" title="Start Checked Jobs" type="button" class="btn btn-success" data-original-title="Start"  ng-click="batchJobStartClick()"><i class="fa fa-play"></i></button>
+                        <button data-toggle="tooltip" title="Stop Checked Jobs" type="button" class="btn btn-success" data-original-title="Stop"   ng-click="batchJobStopClick()"><i class="fa fa-stop"></i></button>
+                        <button data-toggle="tooltip" title="Delete Checked Jobs" type="button" class="btn btn-success" data-original-title="Delete" ng-click="batchJobDeleteClick()"><i class="fa fa-trash-o"></i></button>
+
+                    </div>
+
+                    <div class="input-group"  >
+                        <span class="input-group-addon btn-success" data-toggle="tooltip" title="Filter Jobs"><i class="fa fa-search"></i></span>
+                        <input class="form-control" ng-model="jobFilter"  placeholder="Filter" type="text" aria-controls="dt_basic">
+                    </div>
+
+                    <div id="page-group">
+                        <div ng-if="jobTableParams"  ng-table-pagination="jobTableParams" template-url="'views/partials/customPager.html'"></div>
+                    </div>
+
+                </div><!-- /.btn-toolbar -->
+            </div><!-- /.the-box -->
+            <div class="the-box no-margin no-bottom-border">
+                <div class="row">
+                    <div class="col-sm-2 col-md-2">
+                        <div class="list-group primary square no-border">
+                            <a href="javascript:void(0)" class="list-group-item" ng-class="{active: 'All'==selectedCategory}" ng-click="selectedCategory='All'">All <span class="badge badge-success">{{category.totalJobsNum}}</span></a>
+                            <a href="javascript:void(0)" class="list-group-item" ng-class="{active: 'Created' == selectedCategory}" ng-click="selectedCategory='Created'">Created <span class="badge badge-info">{{category.createdJobsNum}}</span> </a>
+                            <a href="javascript:void(0)" class="list-group-item" ng-class="{active: 'Running'== selectedCategory}" ng-click="selectedCategory='Running'">Running <span class="badge badge-warning">{{category.runningJobsNum}}</span></a>
+                            <a href="javascript:void(0)" class="list-group-item" ng-class="{active: 'Completed'== selectedCategory}" ng-click="selectedCategory='Completed'">Completed <span class="badge badge-success">{{category.completedJobsNum}}</span></a>
+                        </div>
+                    </div><!-- /.col-sm-4 col-md-3 -->
+                    <div class="col-sm-5 col-md-5">
+                        <div class="dataTables_wrapper form-inline" role="grid">
+                            <table  ng-table="jobTableParams" template-no-match="views/partials/filterNoMatch.html"  class="table dataTable table-striped  table-hover table-bordered table-noborder " style="width: 100%">
+                                <tr  ng-repeat="job in $data"
+                                     ng-click="setSelected(job)"
+                                     ng-class="{'custom-selected': isSelected(job),'even':$even,'odd':$odd}"
+                                     >
+
+                                    <td data-title="''" ng-show="mode<=2"><div class="checkbox "><label><input type="checkbox" class="checkbox style-2" data-name="{{job.JobName}}"><span></span> </label></div></td>
+                                    <td data-title="'Project Name'" sortable="'JobName'" >{{ job.JobName }}</td>
+                                    <td data-title="'Last Build'" sortable="'Status.Status'" ng-show ="mode>=1">{{ job.Status.Status }}</td>
+                                    <td data-title="'Status'" sortable="'Result'" ng-show="mode>=2">{{ job.Result }}</td>
+                                    <td data-title="'Action'" ng-show="mode==3">
+                                    <div class="btn-group action" data-toggle="buttons">
+                                        <label title="Start Job" class="btn btn-default btn-xs action " ng-click="jobStartClick(job.JobName)">
+                                            <input type="radio" name="style-a1" id="style-a1">
+                                            <i class="fa fa-play action"></i>
+                                        </label>
+                                        <label title="Stop Job" class="btn btn-default btn-xs action active" ng-click="jobStopClick(job.JobName)">
+                                            <input type="radio" name="style-a2" id="style-a2">
+                                            <i class="fa fa-stop action"></i>
+                                        </label>
+                                        <label title="Delete Job" class="btn btn-default btn-xs action " ng-click="jobDeleteClick(job.JobName)">
+                                            <input type="radio" name="style-a2" id="style-a3">
+                                            <i class="fa fa-trash-o action"></i>
+                                        </label>
+                                    </div>
+                                    </td>
+                                </tr>
+                            </table>
+                         </div>
+
+                    </div><!-- /.col-sm-4 col-md-4 -->
+                    <div class="col-sm-5 col-md-5">
+                        <job-detail ng-controller="JobDetailCtrl"></job-detail>
+                    </div><!-- /.col-sm-8 col-md-9 -->
+                </div><!-- /.row -->
+            </div><!-- /.the-box -->
+
+        </div><!-- /.mail-apps-wrap -->
+        <!-- END JOBS TABLE -->
+
+
+    </div><!-- /.container-fluid -->
+
+</div>
+<!-- END MAIN CONTENT -->
+
