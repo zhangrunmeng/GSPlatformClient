@@ -10,12 +10,11 @@
  */
 angular
     .module('jobManagement', [
-        'restangular','ngTableX','ui.bootstrap'
+        'restangular','ngTableRenderer','ui.bootstrap'
     ]).constant('serviceUrl','http://vhwebdevserver.eng.citrite.net')
-    .config(function(RestangularProvider,serviceUrl){
+    .config(function(RestangularProvider, serviceUrl){
         RestangularProvider.setBaseUrl(serviceUrl+'/api/');
     });
-
 
 angular.module('jobManagement')
     .factory('Utility',function(){

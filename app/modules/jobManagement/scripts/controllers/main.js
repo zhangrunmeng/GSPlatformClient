@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of the stringDetectorWebClientAngularApp
  */
-angular.module('jobManagement', [])
+angular.module('jobManagement')
   .controller('MainCtrl', function ($scope,$filter,Restangular,ngTableParams,Utility) {
 
     // all kinds of category jobs count
@@ -97,12 +97,13 @@ angular.module('jobManagement', [])
                 $scope.jobTableParams = new ngTableParams(
                     {
                         page:1, // first page number
-                        count:15, // count per page
+                        count:25, // count per page
                         sorting: {
                             JobName:'asc'     // initial sorting
                         }
                     },
-                    {   $scope:$scope,
+                    {
+                        $scope: $scope,
                         showDefaultPagination:false,
                         counts: [], // hide the page size
                         getData: function($defer , params){
@@ -118,6 +119,7 @@ angular.module('jobManagement', [])
                         }
                     }
                 );
+                $scope.onResize();
             });
     };
 

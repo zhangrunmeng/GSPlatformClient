@@ -15,12 +15,12 @@ angular.module('jobManagement')
       link: function postLink(scope, element, attrs) {
           // mode changed according window width , will trigger dynamic columns hide and show
           scope.onResize= function (){
-             var jobsTable = angular.element("table[ng-Table='jobTableParams']");
+             var jobsTable = angular.element("table[ng-table='jobTableParams']");
              var tableWrapper = jobsTable.parent();
               var oldMode = scope.mode;
               if(tableWrapper.width()<jobsTable.width()||jobsTable.width()<320){
 
-                  scope.mode =Utility.ModeEnum.extraSmall;
+                  scope.mode = Utility.ModeEnum.extraSmall;
               }else if(jobsTable.width()<420) {
                   scope.mode = Utility.ModeEnum.small;
               }
@@ -46,9 +46,10 @@ angular.module('jobManagement')
               adjustNavHeight();
               scope.onResize();
           });
+
           scope.$watch('$viewContentLoaded', function() {
               adjustNavHeight();
-              scope.onResize();
+              //scope.onResize();
               scope.loadJobsData();
 
           });
