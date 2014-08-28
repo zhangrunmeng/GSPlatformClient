@@ -49,7 +49,7 @@
                     </div><!-- /.col-sm-4 col-md-3 -->
                     <div class="col-sm-5 col-md-5">
                         <div class="dataTables_wrapper form-inline" role="grid">
-                            <ng-table-renderer ng-table-params="jobTableParams" content-height="600px">
+                            <ng-table-renderer content-height="600px">
                                 <table ng-table="jobTableParams" template-no-match="modules/jobManagement/views/partials/filterNoMatch.html"  class="table dataTable table-striped  table-hover table-bordered table-noborder " style="width: 100%">
                                     <tr  ng-repeat="job in $data"
                                          ng-click="setSelected(job)"
