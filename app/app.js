@@ -20,7 +20,10 @@ angular
     .when('/job', {
         templateUrl: 'modules/jobManagement/index.html'
     })
+    .when('#', {
+
+    })
     .otherwise({
-        redirectTo: '/'
+        redirectTo: "/"
     });
   });

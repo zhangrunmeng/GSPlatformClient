@@ -17,13 +17,28 @@ angular.module('ngTableRenderer', ['ngTableX'])
                 scope.$watch('attrs.contentHeight', function(value){
                     element.find("div[class='contentDiv']").css('height', value);
                 }, true);
+
+                scope.tableParams = element.find("table[ng-table]").attr('ng-table');
                 element.find("div[class='contentDiv']").css('height', contentHeight);
                 scope.$on('ngTableParamsChanged', function(event, tablescope){
-                    if(!angular.isUndefined(tablescope)){
-                        var headerTemplate = angular.element(document.createElement('thead')).attr('ng-include', 'templates.header');
-                        element.find("table[id='table-header']").append(headerTemplate);
-                        $compile(headerTemplate)(tablescope);
-                        element.find("table[id!='table-header']").find('thead').remove();
+                    if(scope.tableParams == tablescope.tableParams){
+                        scope.tableScope = tablescope.scope;
+                        scope.$on('ngTableAfterReloadData', function(){
+                            var tablescope = scope.tableScope;
+                            if(!angular.isUndefined(tablescope)){
+                                var current =  angular.element(element.find("table[id='table-header'] thead tr")[0]).find("th").length;
+                                if(current != tablescope.$columns.length){
+                                    var headerTemplate = angular.element(document.createElement('thead')).attr('ng-include', 'templates.header');
+                                    element.find("table[id='table-header']").append(headerTemplate);
+                                    $compile(headerTemplate)(tablescope);
+                                }
+                                element.find("table[id!='table-header'] thead").remove();
+                            }
+                            $timeout(func, 0)
+                        });
+                    } else {
+                        scope.$on('ngTableAfterReloadData', function(){
+                        });
                     }
                 });
                 var func = function(){
@@ -45,9 +60,6 @@ angular.module('ngTableRenderer', ['ngTableX'])
                         }
                     });
                 };
-                scope.$on('ngTableAfterReloadData', function(){
-                    $timeout(func, 0)
-                });
             }
         };
     });

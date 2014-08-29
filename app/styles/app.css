@@ -6,3 +6,11 @@
     overflow-y: scroll;
     height: 36px;
 }
+
+.widget-icon {
+    color:  #37BC9B;
+}
+
+.widget-icon i[button] {
+    cursor: pointer;
+}

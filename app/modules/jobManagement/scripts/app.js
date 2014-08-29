@@ -10,7 +10,7 @@
  */
 angular
     .module('jobManagement', [
-        'restangular','ngTableRenderer','ui.bootstrap'
+        'restangular','ngTableX','tableScrollWatcher', 'ui.bootstrap', 'ngMessages'
     ]).constant('serviceUrl','http://vhwebdevserver.eng.citrite.net')
     .config(function(RestangularProvider, serviceUrl){
         RestangularProvider.setBaseUrl(serviceUrl+'/api/');
