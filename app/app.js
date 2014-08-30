@@ -1,4 +1,17 @@
 'use strict';
+
+var $installedModules = [
+    {
+        id : "job",
+        module : 'jobManagement',
+        url : "/job"
+    },
+    {
+        id : "home",
+        module : 'home',
+        url : "/"
+    }
+];
 /**
  * @ngdoc overview
  * @name stringDetectorWebClientAngularApp
@@ -7,23 +20,42 @@
  *
  * Main module of the application.
  */
+var $moduleDependencyList = [];
+angular.forEach($installedModules, function(module){
+    $moduleDependencyList.push(module.module);
+});
+
+var $selectedModule = 'home';
 angular
   .module('gsPlatformClient', [
-    'ngRoute',
-    'jobManagement'
-  ])
+    'ngRoute'
+    ].concat($moduleDependencyList))
   .config(function ($routeProvider) {
-    $routeProvider
-    .when('/', {
-        templateUrl: 'modules/home/index.html'
-    })
-    .when('/job', {
-        templateUrl: 'modules/jobManagement/index.html'
-    })
-    .when('#', {
+        angular.forEach($installedModules, function(module){
+            $routeProvider
+                .when(module.url, {
+                    templateUrl: 'modules/' + module.module + '/index.html'
+                });
+        });
+        $routeProvider
+        .otherwise({
+                redirectTo: "/"
+            });
+  })
+  .controller("gsPlatformController", function($scope, $location){
+    var url = $location.url();
 
-    })
-    .otherwise({
-        redirectTo: "/"
+    var initialize = function() {
+        angular.forEach($installedModules, function (module) {
+            if (url == module.url) {
+                $scope.selectedModule = module.id;
+                $scope.modulePathPrefix = 'modules/' + module.module + '/';
+                $selectedModule = module.id;
+            }
+        });
+    };
+    $scope.$watch('$location.$$absurl', function(value){
+        initialize();
     });
+    initialize();
   });

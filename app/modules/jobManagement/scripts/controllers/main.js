@@ -9,7 +9,7 @@
  */
 angular.module('jobManagement')
   .controller('MainCtrl', function ($scope,$rootScope,$filter,Restangular,ngTableParams,signalRHubProxy,serviceUrl,Utility) {
-    var jobHubProxy = signalRHubProxy(serviceUrl,'jobHub',{logging:true});
+    //var jobHubProxy = signalRHubProxy(serviceUrl,'jobHub',{logging:true});
 
     // all kinds of category jobs count
     $scope.selectedCategory= Utility.defaultCategory;
@@ -21,51 +21,93 @@ angular.module('jobManagement')
     });
      // init jobs data
     $scope.loadJobsData = function(){
-            Restangular.one('tools',Utility.ToolName).get({fields:'toolname,viewname,jobs(jobname,status)'})
-                .then(function (toolData){
-                    toolData.Jobs.forEach(function(job){
-                        job.Result = Utility.BuildStatusMap[job.Status.Status];
-                    });
-                    $scope.jobs = toolData.Jobs.filter(function(job){
-                        return job.JobName!= Utility.ValidationJob;
-                    });
-                    $scope.selectedJob= $scope.jobs[0];
-                    angular.forEach($scope.jobs,function(job){
-                       if(job.Result==Utility.running){
-                           $scope.invokeFetchJobReport(job.JobName);
-                       };
-                    });
-                },function(err){
-                    console.log(err);
-                }).then(function(){
-                    // ng-table jobs table
-                    $scope.jobTableParams = new ngTableParams(
-                        {
-                            page:1, // first page number
-                            count:25, // count per page
-                            sorting: {
-                                JobName:'asc'     // initial sorting
-                            }
-                        },
-                        {   $scope:$scope,
-                            showDefaultPagination:false,
-                            counts: [], // hide the page size
-                            getData: function($defer , params){
-                                $scope.category = $filter('categoryCount')($scope.jobs);
-                                var categoryData = $filter('jogCategoryFilter')($scope.jobs,$scope.selectedCategory);
-                                var filteredData = $filter('objectOptionFilter')(categoryData,{JobName:"",Status:{Status:""},Result:""},$scope.jobFilter);
-                                // set total item size
-                                params.total(filteredData.length);
-                                var orderedData = params.sorting() ?
-                                    $filter('orderBy')(filteredData, params.orderBy()) :
-                                    filteredData;
-                                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                            }
-                        }
-                    );
-                    $scope.onResize();
-                });
-        };
+            //temp code for test local
+             $scope.jobs = [];
+             for(var i=0; i < 50; i++){
+                 $scope.jobs.push({
+                     JobName : "test Job test Job test Job test Job test Job",
+                     Status : {
+                         Status : "Success"
+                     },
+                     Result : "Completed"
+                 });
+             }
+             $scope.jobTableParams = new ngTableParams(
+                 {
+                     page:1, // first page number
+                     count:25, // count per page
+                     sorting: {
+                        JobName:'asc'     // initial sorting
+                     }
+                 },
+                 {
+                     $scope:$scope,
+                     showDefaultPagination:false,
+                     counts: [], // hide the page size
+                     getData: function($defer , params){
+                         $scope.category = $filter('categoryCount')($scope.jobs);
+                         var categoryData = $filter('jogCategoryFilter')($scope.jobs,$scope.selectedCategory);
+                         var filteredData = $filter('objectOptionFilter')(categoryData,{JobName:"",Status:{Status:""},Result:""},$scope.jobFilter);
+                         // set total item size
+                         params.total(filteredData.length);
+                         var orderedData = params.sorting() ?
+                             $filter('orderBy')(filteredData, params.orderBy()) :
+                             filteredData;
+                         $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+                     }
+                 }
+             );
+             //$scope.onResize();
+
+
+            //end of temp code
+
+
+//            Restangular.one('tools',Utility.ToolName).get({fields:'toolname,viewname,jobs(jobname,status)'})
+//                .then(function (toolData){
+//                    toolData.Jobs.forEach(function(job){
+//                        job.Result = Utility.BuildStatusMap[job.Status.Status];
+//                    });
+//                    $scope.jobs = toolData.Jobs.filter(function(job){
+//                        return job.JobName!= Utility.ValidationJob;
+//                    });
+//                    $scope.selectedJob= $scope.jobs[0];
+//                    angular.forEach($scope.jobs,function(job){
+//                       if(job.Result==Utility.running){
+//                           $scope.invokeFetchJobReport(job.JobName);
+//                       };
+//                    });
+//                },function(err){
+//                    console.log(err);
+//                }).then(function(){
+//                    // ng-table jobs table
+//                    $scope.jobTableParams = new ngTableParams(
+//                        {
+//                            page:1, // first page number
+//                            count:25, // count per page
+//                            sorting: {
+//                                JobName:'asc'     // initial sorting
+//                            }
+//                        },
+//                        {   $scope:$scope,
+//                            showDefaultPagination:false,
+//                            counts: [], // hide the page size
+//                            getData: function($defer , params){
+//                                $scope.category = $filter('categoryCount')($scope.jobs);
+//                                var categoryData = $filter('jogCategoryFilter')($scope.jobs,$scope.selectedCategory);
+//                                var filteredData = $filter('objectOptionFilter')(categoryData,{JobName:"",Status:{Status:""},Result:""},$scope.jobFilter);
+//                                // set total item size
+//                                params.total(filteredData.length);
+//                                var orderedData = params.sorting() ?
+//                                    $filter('orderBy')(filteredData, params.orderBy()) :
+//                                    filteredData;
+//                                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+//                            }
+//                        }
+//                    );
+//                    $scope.onResize();
+//                });
+    };
     // a global filter for jobs
     $scope.jobFilter='';
     $scope.$watch("jobFilter", function () {
@@ -178,6 +220,7 @@ angular.module('jobManagement')
     };
 
     // fetch Job Report
+    /*
     $scope.invokeFetchJobReport = function(jobName){
        jobHubProxy.invoke('fetchJobReport',jobName);
     };
@@ -240,5 +283,5 @@ angular.module('jobManagement')
         $scope.jobs.splice(removeIndex,1);
         $scope.jobTableParams.reload();
     });
-
+*/
 });

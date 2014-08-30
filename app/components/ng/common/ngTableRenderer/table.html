@@ -1,10 +1,7 @@
 <div class="ngTableRenderer">
     <div class="headerDiv">
-        <table id="table-header" class="table dataTable table-striped table-hover table-bordered table-noborder"></table>
+        <table id="table-header" class="table dataTable table-striped table-hover table-bordered table-noborder ng-scope ng-table"></table>
     </div>
-    <div class="contentDiv" >
-        <table id="table-content" class="table dataTable table-striped table-hover table-bordered table-noborder" ng-transclude>
-
-        </table>
+    <div class="contentDiv" ng-transclude>
     </div>
 </div>

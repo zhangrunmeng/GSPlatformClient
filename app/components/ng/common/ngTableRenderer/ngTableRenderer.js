@@ -2,7 +2,7 @@
  * Created by runmengz on 8/27/2014.
  */
 angular.module('ngTableRenderer', ['ngTableX'])
-    .directive('ngTableRenderer', function($compile, $timeout) {
+    .directive('ngTableRenderer', function($window, $compile, $timeout) {
 
         var trim = function(value1, value2){
             return value1.substring(0, value1.indexOf("px")) - value2.substring(0, value2.indexOf("px"));
@@ -14,52 +14,115 @@ angular.module('ngTableRenderer', ['ngTableX'])
             templateUrl: 'components/ng/common/ngTableRenderer/table.html',
             link :  function (scope, element, attrs) {
                 var contentHeight = attrs.contentHeight;
-                scope.$watch('attrs.contentHeight', function(value){
+                scope.$watch(attrs.contentHeight, function(value){
                     element.find("div[class='contentDiv']").css('height', value);
                 }, true);
-
-                scope.tableParams = element.find("table[ng-table]").attr('ng-table');
                 element.find("div[class='contentDiv']").css('height', contentHeight);
-                scope.$on('ngTableParamsChanged', function(event, tablescope){
-                    if(scope.tableParams == tablescope.tableParams){
-                        scope.tableScope = tablescope.scope;
-                        scope.$on('ngTableAfterReloadData', function(){
-                            var tablescope = scope.tableScope;
-                            if(!angular.isUndefined(tablescope)){
-                                var current =  angular.element(element.find("table[id='table-header'] thead tr")[0]).find("th").length;
-                                if(current != tablescope.$columns.length){
-                                    var headerTemplate = angular.element(document.createElement('thead')).attr('ng-include', 'templates.header');
-                                    element.find("table[id='table-header']").append(headerTemplate);
-                                    $compile(headerTemplate)(tablescope);
-                                }
-                                element.find("table[id!='table-header'] thead").remove();
-                            }
-                            $timeout(func, 0)
-                        });
-                    } else {
-                        scope.$on('ngTableAfterReloadData', function(){
-                        });
+                scope.columnwidth = [];
+                if(!angular.isUndefined(attrs.columnWidth)){
+                    scope.columnwidth = attrs.columnWidth.split(",");
+                }
+                scope.$watch(attrs.columnWidth, function(value, old){
+                    if(!angular.isUndefined(value)){
+                        scope.columnwidth = value.split(",");
+                    }
+                    if(value == old) {
+                        return;
+                    }
+                    if(!angular.isUndefined(value)){
+                        scope.columnwidth = value.split(",");
+                        $timeout(func, 0);
+                    }
+                }, true);
+
+                var tableparams = element.find("table[ng-table]").attr('ng-table');
+                scope.$watch(tableparams + ".settings().scope", function(tablescope){
+                    if(!angular.isUndefined(tablescope)){
+                        scope.targetTableScope = tablescope.$id;
+                        var headerTemplate = angular.element(document.createElement('thead')).attr('ng-include', 'templates.header');
+                        element.find("table[id='table-header']").append(headerTemplate);
+                        $compile(headerTemplate)(tablescope);
+                        element.find("table[id!='table-header']").find('thead').remove();
                     }
                 });
                 var func = function(){
                     var headtable = element.find("table[id='table-header']");
-                    var ngtable = element.find("table[id!='table-header']");
-                    headtable.attr('style', ngtable.attr('style'));
+                    var ngtable = element.find("table[ng-table]");
                     var columnes = angular.element(ngtable.find('tr')[0]).find('td');
-
+                    headtable.attr('style', ngtable.attr('style'));
+                    if(element.find("div[class='contentDiv']").width() - ngtable.width() > 5){
+                        element.find("div[class='headerDiv']").css('overflow-y',"scroll");
+                    } else {
+                        element.find("div[class='headerDiv']").css('overflow-y',"auto");
+                    }
+                    var count = 0;
                     angular.forEach(angular.element(headtable.find('tr')[0]).find('th'), function(th, idx){
                         th = angular.element(th);
-                        if(!th.hasClass('ng-hide') && columnes[idx]){
+                        if(columnes[idx] && scope.columnwidth[count]){
                             var col = angular.element(columnes[idx]);
-//                            var diff = 0;
-//                            diff += trim(th.css("paddingLeft"),col.css("paddingLeft"));
-//                            diff += trim(th.css("paddingRight"),col.css("paddingRight"));
-//                            diff += trim(th.css("borderLeft"),col.css("borderLeft"));
-//                            diff += trim(th.css("borderRight"),col.css("borderRight"));
-                            th.css('width', col.width() + 'px');
+                            if(!th.hasClass('ng-hide')){
+                                th.css('width', scope.columnwidth[count]);
+                                col.css('width', scope.columnwidth[count++]);
+                                if(th.width() != col.width()){
+                                    var width = col.width();
+                                    th.css('width', width + 'px');
+                                    col.css('width', width + "px");
+                                }
+                            }
                         }
                     });
+
                 };
+//                var func = function(flag){
+//                    var headtable = element.find("table[id='table-header']");
+//                    var ngtable = element.find("table[ng-table]");
+//                    //headtable.attr('style', ngtable.attr('style'));
+//                    var columnes = angular.element(ngtable.find('tr')[0]).find('td');
+//                    if(flag != true && scope.columns && scope.columns.length == columnes.length){
+//                        angular.forEach(columnes, function(td, idx){
+//                            td = angular.element(td);
+//                            if(!td.hasClass('ng-hide') && scope.columns[idx]){
+//                                td.css('width', scope.columns[idx].width + 'px');
+//                            }
+//                        });
+//                    } else {
+//                        scope.columns = columnes;
+//                        headtable.attr('style', ngtable.attr('style'));
+//                        if(element.find("div[class='contentDiv']").width() > ngtable.width()){
+//                            element.find("div[class='headerDiv']").css('overflow-y',"scroll");
+//                        } else {
+//                            element.find("div[class='headerDiv']").css('overflow-y',"auto");
+//                        }
+//
+//                        var width = ngtable.width();
+//                        headtable.css('width', width + "px");
+//                        ngtable.css('width', width + "px");
+//                        angular.forEach(angular.element(headtable.find('tr')[0]).find('th'), function(th, idx){
+//                            th = angular.element(th);
+//                            if(columnes[idx]){
+//                                var col = angular.element(columnes[idx]);
+//                                if(!th.hasClass('ng-hide')){
+//                                    columnes[idx].width = col.width();
+//                                    th.css('width', columnes[idx].width + 'px');
+//                                    col.css('width', columnes[idx].width + "px");
+//                                }
+//                            }
+//                        });
+//                        headtable.css('width', "100%");
+//                        ngtable.css('width', "100%");
+//                    }
+//                };
+
+                scope.$on('ngTableAfterReloadData', function(evt){
+                    if(!scope.targetTableScope || scope.targetTableScope != evt.targetScope.$id){
+                        return;
+                    }
+                    $timeout(func, 0)
+                });
+
+//                angular.element($window).bind('resize',function(){
+//                    func();
+//                });
             }
         };
     });

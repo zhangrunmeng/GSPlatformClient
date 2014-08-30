@@ -7,7 +7,7 @@
  * # mainPanel
  */
 angular.module('jobManagement')
-  .directive('mainPanel', function ($window,Utility) {
+  .directive('mainPanel', function ($window,$timeout, Utility) {
     return {
       templateUrl: 'modules/jobManagement/views/main.html',
       restrict: 'E',
@@ -15,21 +15,26 @@ angular.module('jobManagement')
       link: function postLink(scope, element, attrs) {
           // mode changed according window width , will trigger dynamic columns hide and show
           scope.onResize= function (){
-             var jobsTable = angular.element("table[ng-Table='jobTableParams']");
-             var tableWrapper = jobsTable.parent();
+              var jobsTable = angular.element("table[ng-Table='jobTableParams']");
               var oldMode = scope.mode;
-              if(tableWrapper.width()<jobsTable.width()||jobsTable.width()<320){
-
-                  scope.mode =Utility.ModeEnum.extraSmall;
-              }else if(jobsTable.width()<420) {
-                  scope.mode = Utility.ModeEnum.small;
+              if(!jobsTable.width()){
+                  $timeout(scope.onResize, 100);
+                  return;
               }
-              else if(jobsTable.width()<630){
+              if(jobsTable.width()<320){
+                  scope.jobTableWidth = "15%,85%";
+                  scope.mode = Utility.ModeEnum.extraSmall;
+              } else if(jobsTable.width()<420) {
+                  scope.jobTableWidth = "15%,65%,20%";
+                  scope.mode = Utility.ModeEnum.small;
+              } else if(jobsTable.width()<630){
+                  scope.jobTableWidth = "10%,55%,15%,15%";
                   scope.mode = Utility.ModeEnum.medium;
-              }else {
+              } else {
+                  scope.jobTableWidth = "55%,15%,15%,15%";
                   scope.mode = Utility.ModeEnum.large;
               }
-              if(angular.isDefined(oldMode)&&scope.mode!=oldMode){
+              if(angular.isDefined(oldMode) && scope.mode!=oldMode){
                   scope.$apply();
               }
           };
@@ -40,6 +45,7 @@ angular.module('jobManagement')
              var setHeight = leftPanel.height()>$window.innerHeight ? leftPanel.height() : $window.innerHeight;
              leftPanel.css('min-height',setHeight+'px');
              root.css('min-height',setHeight+'px');
+             scope.jobTableHeight = (setHeight - 300) + "px";
           };
 
           angular.element($window).bind('resize',function(){
@@ -49,8 +55,8 @@ angular.module('jobManagement')
           scope.$watch('$viewContentLoaded', function() {
               adjustNavHeight();
               scope.loadJobsData();
+              scope.onResize();
           });
-
 
       }
     };

@@ -23,17 +23,17 @@
     <link rel="stylesheet" href="styles/smart-admin-skins.css">
     <link rel="stylesheet" href="styles/custom.css">
     <link rel="stylesheet" href="styles/app.css">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+    <!--link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700"-->
     <!-- endbuild -->
 </head>
   <body ng-app="gsPlatformClient" class="smart-style-3">
       <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 
-        <div>
+        <div ng-controller="gsPlatformController">
           <div>
               <ul class="nav nav-pills pull-right">
-                  <li class="active"><a ng-href="#">Home</a></li>
-                  <li><a ng-href="#/job">Job</a></li>
+                  <li ng-class="{true: 'active', false: 'inactive'}[selectedModule == 'home']"><a ng-href="#" ng-click="selectedModule = 'home'">Home</a></li>
+                  <li ng-class="{true: 'active', false: 'inactive'}[selectedModule == 'job']"><a ng-href="#/job" ng-click="selectedModule = 'job'">Job</a></li>
               </ul>
               <h3 class="text-muted">GS Platform</h3>
           </div>
@@ -78,6 +78,8 @@
 
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="modules/home/scripts/app.js"></script>
+
         <script src="modules/jobManagement/scripts/app.js"></script>
         <script src="modules/jobManagement/scripts/controllers/main.js"></script>
         <script src="modules/jobManagement/scripts/directives/customMenu.js"></script>
@@ -94,8 +96,10 @@
         <script src="modules/jobManagement/scripts/directives/fileRead.js"></script>
         <script src="modules/jobManagement/scripts/services/signalRHubProxy.js"></script>
 
-      <script src="components/ng/common/tableScrollWatcher.js"></script>
-      <script src="app.js"></script>
+        <script src="components/ng/common/tableScrollWatcher.js"></script>
+        <script src="components/ng/common/ngTableRenderer/ngTableRenderer.js"></script>
+
+        <script src="app.js"></script>
         <!-- endbuild -->
     </body>
 </html>
