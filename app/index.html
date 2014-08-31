@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en-us" ng-app="gsPlatformClient">
 <head>
     <meta charset="utf-8">
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
@@ -26,7 +26,7 @@
     <!--link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700"-->
     <!-- endbuild -->
 </head>
-  <body ng-app="gsPlatformClient" class="smart-style-3">
+  <body class="smart-style-3">
       <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 
         <div ng-controller="gsPlatformController">
@@ -47,59 +47,11 @@
         <![endif]-->
         <!-- build:js(.) scripts/oldieshim.js -->
         <!--[if lt IE 9]>
-        <script src="bower_components/es5-shim/es5-shim.js"></script>
+        <!--script src="bower_components/es5-shim/es5-shim.js"></script>
         <script src="bower_components/json3/lib/json3.min.js"></script>
         <![endif]-->
         <!-- endbuild -->
 
-        <!-- build:js(.) scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/json3/lib/json3.js"></script>
-        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="bower_components/angular-resource/angular-resource.js"></script>
-        <script src="bower_components/jquery.fileDownload/src/Scripts/jquery.fileDownload.js"></script>
-        <script src="bower_components/jquery.validate/dist/jquery.validate.js"></script>
-        <script src="bower_components/pace/pace.js"></script>
-        <script src="bower_components/angular-animate/angular-animate.js"></script>
-        <script src="bower_components/angular-route/angular-route.js"></script>
-        <script src="bower_components/lodash/dist/lodash.compat.js"></script>
-        <script src="bower_components/restangular/dist/restangular.js"></script>
-        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <script src="bower_components/angular-messages/angular-messages.js"></script>
-        <script src="bower_components/ng-table-x/ng-table-x.js"></script>
-        <script src="bower_components/signalr/jquery.signalr-2.0.2.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
-
-        <!--Reference the auto generated SignalR hub script. -->
-        <!--script src="http://vhwebdevserver.eng.citrite.net/signalr/hubs"></script-->
-
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="modules/home/scripts/app.js"></script>
-
-        <script src="modules/jobManagement/scripts/app.js"></script>
-        <script src="modules/jobManagement/scripts/controllers/main.js"></script>
-        <script src="modules/jobManagement/scripts/directives/customMenu.js"></script>
-        <script src="modules/jobManagement/scripts/directives/mainPanel.js"></script>
-        <script src="modules/jobManagement/scripts/filters/objectOptionFilter.js"></script>
-        <script src="modules/jobManagement/scripts/filters/jobCategoryFilter.js"></script>
-        <script src="modules/jobManagement/scripts/filters/categoryCount.js"></script>
-        <script src="modules/jobManagement/scripts/controllers/jobDetail.js"></script>
-        <script src="modules/jobManagement/scripts/directives/jobDetail.js"></script>
-        <script src="modules/jobManagement/scripts/controllers/jobCreate.js"></script>
-        <script src="modules/jobManagement/scripts/directives/uniqueJobName.js"></script>
-        <script src="modules/jobManagement/scripts/directives/customJobName.js"></script>
-        <script src="modules/jobManagement/scripts/directives/checkTiming.js"></script>
-        <script src="modules/jobManagement/scripts/directives/fileRead.js"></script>
-        <script src="modules/jobManagement/scripts/services/signalRHubProxy.js"></script>
-
-        <script src="components/ng/common/tableScrollWatcher.js"></script>
-        <script src="components/ng/common/ngTableRenderer/ngTableRenderer.js"></script>
-
-        <script src="app.js"></script>
-        <!-- endbuild -->
-    </body>
+        <script data-main="main" src="../bower_components/requirejs/require.js"></script>
+  </body>
 </html>
