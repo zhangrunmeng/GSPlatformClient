@@ -16,26 +16,31 @@ define(['angular',
                 templateUrl: 'gf/common/ngTableRenderer/table.html',
                 link :  function (scope, element, attrs) {
                     var contentHeight = attrs.contentHeight;
-                    scope.$watch(attrs.contentHeight, function(value){
-                        element.find("div[class='contentDiv']").css('height', value);
-                    }, true);
+                    try{
+                        scope.$watch(attrs.contentHeight, function(value){
+                            if(!angular.isUndefined(value))
+                                element.find("div[class='contentDiv']").css('height', value);
+                        }, true);
+                    }catch(e){};
                     element.find("div[class='contentDiv']").css('height', contentHeight);
                     scope.columnwidth = [];
                     if(!angular.isUndefined(attrs.columnWidth)){
                         scope.columnwidth = attrs.columnWidth.split(",");
                     }
-                    scope.$watch(attrs.columnWidth, function(value, old){
-                        if(!angular.isUndefined(value)){
-                            scope.columnwidth = value.split(",");
-                        }
-                        if(value == old) {
-                            return;
-                        }
-                        if(!angular.isUndefined(value)){
-                            scope.columnwidth = value.split(",");
-                            $timeout(func, 0);
-                        }
-                    }, true);
+                    try{
+                        scope.$watch(attrs.columnWidth, function(value, old){
+                            if(!angular.isUndefined(value)){
+                                scope.columnwidth = value.split(",");
+                            }
+                            if(value == old) {
+                                return;
+                            }
+                            if(!angular.isUndefined(value)){
+                                scope.columnwidth = value.split(",");
+                                $timeout(func, 0);
+                            }
+                        }, true);
+                    }catch(e){};
 
                     var tableparams = element.find("table[ng-table]").attr('ng-table');
                     scope.$watch(tableparams + ".settings().scope", function(tablescope){

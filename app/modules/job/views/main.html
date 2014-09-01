@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <!-- BEGIN JOBS  TABLE -->
         <div class="mail-apps-wrap">
-            <div class="the-box bg-success no-border no-margin heading">
+            <div header class="the-box bg-success no-border no-margin heading">
                 <div class="row mail-header">
                     <div class="col-sm-6">
                         <h1><i class="fa fa-tasks icon-lg icon-circle icon-bordered"></i>Daemon Jobs</h1>
@@ -14,7 +14,7 @@
                 </div><!-- /.row -->
             </div>
 
-            <div class="the-box toolbar no-border no-margin">
+            <div controllers class="the-box toolbar no-border no-margin">
                 <div class="btn-toolbar" role="toolbar" >
                     <div class="btn-group" ng-controller="JobCreateCtrl">
                         <a href="javascript:void(0)"  title="Create New Job" class="btn btn-danger"  ng-click="openModal()" ><i class="fa fa-pencil"></i> New job</a>
@@ -37,7 +37,7 @@
 
                 </div><!-- /.btn-toolbar -->
             </div><!-- /.the-box -->
-            <div class="the-box no-margin no-bottom-border">
+            <div content class="the-box no-margin no-bottom-border">
                 <div class="row">
                     <div class="col-sm-2 col-md-2">
                         <div class="list-group primary square no-border">
@@ -48,7 +48,7 @@
                         </div>
                     </div><!-- /.col-sm-4 col-md-3 -->
                     <div class="col-sm-5 col-md-5">
-                        <div class="dataTables_wrapper form-inline" role="grid">
+                        <div jobTableDiv class="dataTables_wrapper" role="grid">
                             <ng-table-renderer content-height="jobTableHeight" column-width="jobTableWidth">
                             <table ng-table="jobTableParams" template-no-match="modules/job/views/partials/filterNoMatch.html"  class="table dataTable table-striped  table-hover table-bordered table-noborder " style="width: 100%">
                                 <tr  ng-repeat="job in $data"

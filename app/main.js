@@ -10,6 +10,7 @@ require.config({
         angularMocks: '../bower_components/angular-mocks/angular-mocks',
         angularResource: '../bower_components/angular-resource/angular-resource',
         angularMessage: '../bower_components/angular-messages/angular-messages',
+        angularGrid: '../bower_components/angular-grid/ng-grid-2.0.12.debug',
         bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
         jquery : '../bower_components/jquery/dist/jquery',
         json3   : '../bower_components/json3/lib/json3',
@@ -25,6 +26,7 @@ require.config({
         'angular' : {'exports' : 'angular'},
         'angularRoute': ['angular'],
         'angularMessage' : ['angular'],
+        'angularGrid' : ['angular', 'jquery', 'lodashCompat'],
         'restAngular' : ['angular', 'lodashCompat'],
         'angularMocks': {
             deps:['angular'],
