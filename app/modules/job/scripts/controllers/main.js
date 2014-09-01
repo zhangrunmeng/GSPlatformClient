@@ -15,11 +15,11 @@ define(['angular'], function(angular){
 
         $scope.onResize= function (){
             var jobsTable = $element.find("table[ng-Table='jobTableParams']");
-            var contentDiv = $element.find("div[content]");
-            contentDiv.find("div[jobTableDiv]").css('height', contentDiv.height() - 20 + 'px');
+            var contentDiv = $element.find('div[class="mail-apps-wrap"]');
+            contentDiv.find("div[jobGridDiv]").css('height', contentDiv.height() - 220 + 'px');
             var oldMode = $scope.mode;
             if(!jobsTable.width()){
-                $timeout($scope.onResize, 100);
+                //$timeout($scope.onResize, 100);
                 return;
             }
             if(jobsTable.width()<320){
@@ -44,6 +44,12 @@ define(['angular'], function(angular){
         };
 
         $scope.$on('resizeMainPanel',  $scope.onResize);
+
+        $scope.filteredData = [];
+        $scope.jobGridOptions = {
+            data : 'filteredData',
+            columnDefs: [{field:'JobName', displayName:'Product Name'}, {field:'Result', displayName:'Status'}]
+        };
 
         // all kinds of category jobs count
         $scope.selectedCategory= Utility.defaultCategory;
@@ -115,6 +121,7 @@ define(['angular'], function(angular){
                     console.log(err);
                 }).then(function(){
                     // ng-table jobs table
+                    /*
                     $scope.jobTableParams = new ngTableParams(
                         {
                             page:1, // first page number
@@ -140,6 +147,11 @@ define(['angular'], function(angular){
                         }
                     );
                     //$scope.onResize();
+                    */
+
+                    $scope.category = $filter('categoryCount')($scope.jobs);
+                    var categoryData = $filter('jogCategoryFilter')($scope.jobs,$scope.selectedCategory);
+                    $scope.filteredData = $filter('objectOptionFilter')(categoryData,{JobName:"",Status:{Status:""}, Result:""},$scope.jobFilter);
                 });
         };
         // a global filter for jobs

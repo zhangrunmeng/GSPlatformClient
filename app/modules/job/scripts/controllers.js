@@ -27,6 +27,16 @@ define(['angular'], function(angular){
         })
         .controller('MainCtrl', function($scope, $element, $rootScope,$filter,Restangular,
                                          ngTableParams,signalRHubProxy,serviceUrl,Utility, $injector){
+            $scope.filteredData = [];
+            $scope.jobGridOptions = {
+                data : 'filteredData',
+                columnDefs: [{field:'JobName', displayName:'Product Name', width: "55%"},
+                    {field:'Status.Status', displayName:'Last Build', width: "15%"},
+                    {field:'Result', displayName:'Status', width: "15%"},
+                    {field:'', displayName: 'Action', cellTemplate: 'modules/job/views/templates/jobTableActionCell.html', width: "*", sortable: false}],
+                enableColumnReordering : true,
+                enableColumnResize : true
+            };
             require(['modules/job/scripts/controllers/main'], function(mainCtrl){
                 $injector.invoke(mainCtrl, this, {
                     '$scope': $scope,
