@@ -6,7 +6,7 @@
  */
 
 define(['angular',
-    'modules/job/scripts/services/signalRHubProxy'
+    './services/signalRHubProxy'
     ], function(
     angular,
     signalRHubProxyFactory){

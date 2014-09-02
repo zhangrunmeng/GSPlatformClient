@@ -4,7 +4,7 @@
 define(['angular'], function(angular){
 
     angular.module("job.controllers", ['job.services'])
-        .controller('JobCreateCtrl', function($scope ,$element, $modal, Restangular, $injector){
+        .controller('JobCreateCtrl', function($rootScope, $scope ,$element, $modal, Restangular, $injector){
             require(['modules/job/scripts/controllers/jobCreate'], function(jobCreate){
                 $injector.invoke(jobCreate, this, {
                     '$scope': $scope,
@@ -25,26 +25,40 @@ define(['angular'], function(angular){
                 });
             });
         })
-        .controller('MainCtrl', function($scope, $element, $rootScope,$filter,Restangular,
-                                         ngTableParams,signalRHubProxy,serviceUrl,Utility, $injector){
+        .controller('MainCtrl', function($scope, $element, $rootScope,$filter, Restangular,
+                                         signalRHubProxy, serviceUrl, Utility, $injector){
+            $scope.pagedData = [];
             $scope.filteredData = [];
+            $scope.jobPagingOptions = {
+                pageSizes: [20, 50, 100],
+                pageSize: 20,
+                currentPage: 1
+            };
+            $scope.selectedJobs = [];
+            $scope.totalJobs = $scope.filteredData.length;
             $scope.jobGridOptions = {
-                data : 'filteredData',
+                data : 'pagedData',
                 columnDefs: [{field:'JobName', displayName:'Product Name', width: "55%"},
                     {field:'Status.Status', displayName:'Last Build', width: "15%"},
                     {field:'Result', displayName:'Status', width: "15%"},
                     {field:'', displayName: 'Action', cellTemplate: 'modules/job/views/templates/jobTableActionCell.html', width: "*", sortable: false}],
                 enableColumnReordering : true,
-                enableColumnResize : true
+                enablePaging: true,
+                showFooter: false,
+                totalServerItems : 'totalJobs',
+                pagingOptions: $scope.jobPagingOptions,
+                selectedItems : $scope.selectedJobs,
+                multiSelect : false
             };
-            require(['modules/job/scripts/controllers/main'], function(mainCtrl){
+
+            require([$scope.$modulePath + 'scripts/controllers/main'], function(mainCtrl){
                 $injector.invoke(mainCtrl, this, {
                     '$scope': $scope,
                     '$element': $element,
                     '$rootScope': $rootScope,
                     '$filter': $filter,
                     'Restangular': Restangular,
-                    'ngTableParams' : ngTableParams,
+                    'signalRHubProxy' : signalRHubProxy,
                     'serviceUrl': serviceUrl,
                     'Utility' : Utility
                 });

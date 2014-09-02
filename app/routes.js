@@ -19,19 +19,26 @@ define(['angular',
             });
             $routeProvider.otherwise({redirectTo: '/'});
         }])
-        .controller("gsPlatformController", function($scope, $location){
-            var url = $location.url();
-
-            var initialize = function() {
-                angular.forEach(installedModules, function (module) {
-                    if (url == module.url) {
-                        $scope.selectedModule = module.id;
-                        app.constant('selectedModule', module.id);
-                        app.constant('modulePathPrefix', 'modules/' + module.module + '/');
-                    }
-                });
+        .controller("gsPlatformController", function($rootScope, $scope, $location, $element, $window){
+            var initialize = function(newvalue, oldvalue) {
+                if(newvalue !== oldvalue){
+                    angular.forEach(installedModules, function (module) {
+                        if (newvalue == module.url) {
+                            $scope.selectedModule = module.id;
+                            $scope.$modulePath = 'modules/' + module.id + '/';
+                            $rootScope.$modulePath = 'modules/' + module.id + '/';
+                        }
+                    });
+                }
             };
-            initialize();
+            initialize($location.url());
+            $scope.$watch(function(){return $location.url()}, initialize);
+            $scope.$contentScale = function(){
+                return {width: $element.width(), height: $element.height() - 63}
+            };
+            angular.element($window).bind('resize',function(){
+                $scope.$broadcast('updateSize', {width: $element.width(), height: $element.height() - 63});
+            });
         });
 
 });

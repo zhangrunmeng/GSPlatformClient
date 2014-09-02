@@ -89,6 +89,15 @@ define(['angular'],function(angular){
                         } // end else
                     } // end if
                 });
+
+                var updateSize = function (evt, scale){
+                    var leftPanel= element.parent();
+                    var root = angular.element('body');
+                    leftPanel.css({'min-height' : scale.height + 'px', 'top' : (root.height() - scale.height) + "px"});
+                }
+
+                scope.$on('updateSize', updateSize);
+                updateSize(null, scope.$contentScale());
             }
         };
     }

@@ -7,57 +7,36 @@ define(['angular',
             customMenu
         ){
             angular.module("job.directives", ['job.services'])
-                .directive('mainPanel', function ($window,$timeout, Utility) {
+                .directive('mainPanel', function ($window, Utility) {
                     return {
                         templateUrl: 'modules/job/views/main.html',
                         restrict: 'E',
                         /*controller:'MainCtrl',*/
                         link: function postLink(scope, element, attrs) {
                             // mode changed according window width , will trigger dynamic columns hide and show
-                            scope.onResize= function (){
-                                var jobsTable = angular.element("table[ng-Table='jobTableParams']");
+                            var updateSize = function (evt, scale){
+                                var jobGridDiv = element.find("div[jobgrid]");
+                                jobGridDiv.css({
+                                    'height' : (scale.height - 230) + 'px',
+                                    'width' : '100%'
+                                });
                                 var oldMode = scope.mode;
-                                if(!jobsTable.width()){
-                                    $timeout(scope.onResize, 100);
-                                    return;
-                                }
-                                if(jobsTable.width()<320){
-                                    scope.jobTableWidth = "15%,85%";
+                                if(jobGridDiv.width()<320){
                                     scope.mode = Utility.ModeEnum.extraSmall;
-                                } else if(jobsTable.width()<420) {
-                                    scope.jobTableWidth = "15%,65%,20%";
+                                } else if(jobGridDiv.width()<420) {
                                     scope.mode = Utility.ModeEnum.small;
-                                } else if(jobsTable.width()<630){
-                                    scope.jobTableWidth = "10%,55%,15%,15%";
+                                } else if(jobGridDiv.width()<630){
                                     scope.mode = Utility.ModeEnum.medium;
                                 } else {
-                                    scope.jobTableWidth = "55%,15%,15%,15%";
                                     scope.mode = Utility.ModeEnum.large;
                                 }
-                                if(angular.isDefined(oldMode) && scope.mode!=oldMode){
+                                if(angular.isDefined(oldMode) && scope.mode != oldMode){
                                     scope.$apply();
                                 }
                             };
-                            // fix page navbar height
-                            var adjustNavHeight = function(){
-                                var leftPanel= angular.element("[role='aside']");
-                                var root = angular.element('body');
-                                var setHeight = leftPanel.height() > $window.innerHeight ? leftPanel.height() : $window.innerHeight;
-                                leftPanel.css({'min-height' : 'calc(100% - 63px)', 'top' : '63px'});
-                                root.css('min-height',setHeight+'px');
-                                //scope.jobTableHeight = (setHeight - 350) + "px";
-                            };
 
-                            angular.element($window).bind('resize',function(){
-                                adjustNavHeight();
-                                //scope.onResize();
-                                scope.$emit('resizeMainPanel');
-                            });
-                            scope.$watch('$viewContentLoaded', function() {
-                                adjustNavHeight();
-                                //scope.onResize();
-                            });
-
+                            scope.$on('updateSize', updateSize);
+                            updateSize(null, scope.$contentScale());
                         }
                     };
                 })
@@ -77,6 +56,13 @@ define(['angular',
                                     scrollTop:reportArea[0].scrollHeight - reportArea.height()
                                 },2000);
                             };
+                            var updateSize = function(evt, scala){
+                                scope.scmSettingHeight = (scala.height - 550) + 'px'
+                                element.find("div[class='tab-content']").css('height', scala.height - 285 + 'px');
+                            };
+
+                            scope.$on('updateSize', updateSize);
+                            updateSize(null, scope.$contentScale());
                         }
                     };
                 })
@@ -156,7 +142,6 @@ define(['angular',
                         link: function postLink(scope, element, attrs) {
 
                             scope.triggerUpload = function(event){
-
                                 if(event.target==element.find('i')[0]){
                                     element.find('input[type=file]').trigger('click');
                                 }
@@ -181,6 +166,51 @@ define(['angular',
                             element.find('input[type=file]').bind('change',scope.changeConfigFile);
                         }
                     };
+                })
+                .directive('simpleGridPager', function($rootScope){
+                   return {
+                        templateUrl: $rootScope.$modulePath + 'views/templates/simpleGridPager.html',
+                        restrict : 'E',
+                        link : function($scope, element, attrs){
+
+                            $scope.maxPages = function () {
+                                if($scope[attrs.total] === 0) {
+                                    return 1;
+                                }
+                                return Math.ceil($scope[attrs.total] / $scope[attrs.pagingOptions].pageSize);
+                            }
+
+                            $scope.togglePage = function(step){
+                                var page = $scope[attrs.pagingOptions].currentPage;
+                                if(step < 0){
+                                    $scope[attrs.pagingOptions].currentPage = Math.max(page + step, 1);
+                                } else {
+                                    if ($scope[attrs.total] > 0) {
+                                        $scope[attrs.pagingOptions].currentPage = Math.min(page + step, $scope.maxPages());
+                                    } else {
+                                        $scope[attrs.pagingOptions].currentPage++;
+                                    }
+                                }
+                            }
+
+                            $scope.$watch(attrs.pagingOptions, function(newvalue, oldvalue){
+                                if(newvalue !== oldvalue && (newvalue.currentPage != oldvalue.currentPage)){
+                                    updatePagingInfo();
+                                }
+                            }, true);
+
+                            $scope.$watch(attrs.total, function(newvalue, oldvalue){
+                                if(newvalue !== oldvalue){
+                                    updatePagingInfo();
+                                }
+                            }, true);
+
+                            var updatePagingInfo = function(){
+                                $scope.pageDisplayInfo = 'Showing ' + ($scope[attrs.total] > 0 ? (($scope[attrs.pagingOptions].currentPage - 1) * $scope[attrs.pagingOptions].pageSize + 1) : 0) + ' to '
+                                    + Math.min($scope[attrs.pagingOptions].currentPage * $scope[attrs.pagingOptions].pageSize, $scope.totalJobs) + ' of total ' + $scope[attrs.total] + ' Jobs';
+                            }
+                        }
+                   }
                 });
 
         });

@@ -12,13 +12,14 @@ require.config({
         angularMessage: '../bower_components/angular-messages/angular-messages',
         angularGrid: '../bower_components/angular-grid/ng-grid-2.0.12.debug',
         bootstrap: '../bower_components/bootstrap/dist/js/bootstrap',
+        es5shim : 'bower_components/es5-shim/es5-shim',
         jquery : '../bower_components/jquery/dist/jquery',
         json3   : '../bower_components/json3/lib/json3',
         lodashCompat: '../bower_components/lodash/dist/lodash.compat',
         ngTableX: '../bower_components/ng-table-x/ng-table-x',
         pace: '../bower_components/pace/pace',
         restAngular : "../bower_components/restangular/dist/restangular",
-        signalR: '../bower_components/signalr/jquery.signalr-2.0.2',
+        signalR: '../bower_components/signalr/jquery.signalR-2.0.2',
         uiBootstrap: '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
         text: '../bower_components/requirejs-text/text'
     },
@@ -47,7 +48,8 @@ require( [
     'jquery',
     'angular',
     'angularRoute',
-    'installedModules'
+    'installedModules',
+    'signalR'
 ], function($, angular, angularRoute, installedModules) {
 
     var requireModuleList = [];

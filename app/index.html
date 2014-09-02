@@ -31,7 +31,7 @@
   <body class="smart-style-3">
       <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 
-        <div ng-controller="gsPlatformController">
+        <div ng-controller="gsPlatformController" gs-platform style="width: 100%; height: 100%">
           <div>
               <ul class="nav nav-pills pull-right">
                   <li ng-class="{true: 'active', false: 'inactive'}[selectedModule == 'home']"><a ng-href="#" ng-click="selectedModule = 'home'">Home</a></li>
@@ -40,8 +40,7 @@
               <h3 class="text-muted">GS Platform</h3>
           </div>
 
-          <div ng-view=""></div>
-
+          <div ng-view="" style="width:100%;height:calc(100% - 63px)"></div>
         </div>
 
         <!--[if lt IE 7]>
