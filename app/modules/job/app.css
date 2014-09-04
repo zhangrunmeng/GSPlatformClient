@@ -11,3 +11,12 @@
     overflow: auto;
     margin: 10px;
 }
+
+.jobTableActionCell {
+    padding-top: 3px
+}
+
+.failedJobStatus {
+    background-color : #E9573F;
+    color : white;
+}

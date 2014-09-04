@@ -89,7 +89,6 @@
 
 }
 
-
 .custom-form .custom-control-1 textarea {
     color:#808080;
     font-size: 15px;
@@ -135,4 +134,26 @@
 
 .custom-form-edit .custom-control-1 textarea:focus {
     border-color: #66afed;
+}
+
+.custom-panel {
+    position: relative;
+}
+
+.panel-footer {
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.ngGridDiv {
+    border: 1px solid rgb(212,212,212);
+}
+
+.ngGridDiv .ngRow.odd {
+    background-color: #eee;
+}
+
+.ngGridDiv .ngRow.selected {
+    background-color: #c9dde1;
 }

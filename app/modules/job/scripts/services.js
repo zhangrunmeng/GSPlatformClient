@@ -17,19 +17,23 @@ define(['angular',
             var all='All';
             var running="Running";
             var created="Created";
+            var failed = "Failed";
             var completed="Completed";
             var validationJobName ='validation';
             var toolName ='faketool';
             // jenkins ball color  map
-            var buildStatusMap ={"Failed":completed,
+            var buildStatusMap = {
+                "Failed":failed,
                 "InProgress":running,
-                "Unstable":completed,
+                "Unstable":failed,
                 "Success":completed,
-                "Pending":completed,
+                "Pending":running,
                 "Disabled":completed,
                 "Aborted":completed,
                 "NotBuilt":created
             };
+
+
 
             // menu option
             var menuOption ={
@@ -60,6 +64,7 @@ define(['angular',
                 created: created,
                 running:running,
                 completed:completed,
+                failed:failed,
                 all:all,
                 defaultCategory: all,
                 settingTab : settingTab,

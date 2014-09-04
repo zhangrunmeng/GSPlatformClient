@@ -16,6 +16,18 @@ define(['angular'], function(angular){
         })
         .controller('JobDetailCtrl', function($scope, $element, Restangular, ngTableParams, Utility, $injector){
             require(['modules/job/scripts/controllers/jobDetail'], function(jobDetail){
+                $scope.jobHistoryBuilds = [];
+                $scope.totalBuilds = $scope.jobHistoryBuilds.length;
+                $scope.jobHistoryGridOptions = {
+                    data : 'jobHistoryBuilds',
+                    columnDefs: [{field:'name', displayName:'Display Name', cellTemplate: 'modules/job/views/templates/jobHistoryNameCell.html', width: "30%"},
+                        {field:'time', displayName:'Build Time', width: "30%"},
+                        {field:'duration', displayName:'Duration', width: "20%"},
+                        {field:'result', displayName: 'Result', width: "*", sortable: false}],
+                    enableColumnReordering : true,
+                    enablePaging: false,
+                    multiSelect : true
+                };
                 $injector.invoke(jobDetail, this, {
                     '$scope': $scope,
                     '$element': $element,
@@ -38,16 +50,20 @@ define(['angular'], function(angular){
             $scope.totalJobs = $scope.filteredData.length;
             $scope.jobGridOptions = {
                 data : 'pagedData',
-                columnDefs: [{field:'JobName', displayName:'Product Name', width: "55%"},
-                    {field:'Status.Status', displayName:'Last Build', width: "15%"},
-                    {field:'Result', displayName:'Status', width: "15%"},
-                    {field:'', displayName: 'Action', cellTemplate: 'modules/job/views/templates/jobTableActionCell.html', width: "*", sortable: false}],
+                columnDefs: [
+                    {field:'selected', displayName: '', width: "30px", cellTemplate: "<div class='ngCellText' style='padding-top: 10px'><input type='checkbox' ng-checked='!!row.getProperty(col.field)' ng-click='selectRow(row, $event)'></div>"},
+                    {field:'JobName', displayName:'Product Name', width: "55%"},
+                    {field:'Status.Status', displayName:'Last Build', width: "20%", cellTemplate: "<div ng-class='{failedJobStatus: row.getProperty(col.field) == \"Failed\"}'><div class='ngCellText'>{{row.getProperty(col.field)}}</div></div>"},
+                    {field:'Result', displayName:'Status', width: "*", cellTemplate: "<div ng-class='{failedJobStatus: row.getProperty(col.field) == \"Failed\"}'><div class='ngCellText'>{{row.getProperty(col.field)}}</div></div>"}
+                    //{field:'', displayName: 'Action', cellTemplate: 'modules/job/views/templates/jobTableActionCell.html', width: "*", sortable: false}
+                ],
                 enableColumnReordering : true,
                 enablePaging: true,
                 showFooter: false,
                 totalServerItems : 'totalJobs',
                 pagingOptions: $scope.jobPagingOptions,
                 selectedItems : $scope.selectedJobs,
+                showSelectionCheckbox : false,
                 multiSelect : false
             };
 

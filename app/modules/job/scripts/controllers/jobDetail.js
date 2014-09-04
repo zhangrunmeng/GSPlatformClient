@@ -47,6 +47,8 @@ define(['angular'], function(angular){
                     $scope.job.Report = jobData.Report;
                 });
         };
+
+
         // action when clicking  tabs
         $scope.$watch('selectedTab',function(newValue){
             if(angular.isUndefined($scope.job)){
@@ -84,7 +86,7 @@ define(['angular'], function(angular){
 
         // inital job load
         $scope.$on('beginJobLoad',function(event,job){
-            $scope.job=job;
+            $scope.job = job;
             // the copy job is used for editable fields;
             $scope.copyJob = angular.copy(job);
 
@@ -92,9 +94,9 @@ define(['angular'], function(angular){
                 getJobSetting(job);
             }
             // set initial tab
-            $scope.selectedTab=Utility.settingTab;
+            $scope.selectedTab = Utility.settingTab;
             // set initial view mode
-            $scope.basicEdit =$scope.scmEdit=$scope.configEdit=false;
+            $scope.basicEdit = $scope.scmEdit=$scope.configEdit=false;
             // reset all forms
             if(angular.isDefined($scope.basicSettingForm)){
                 $scope.basicSettingForm.$setPristine();
@@ -114,46 +116,60 @@ define(['angular'], function(angular){
         });
 
         $scope.$on('beginJobStart',function(event){
-            $scope.selectedTab = Utility.reportTab;
+//            $scope.selectedTab = Utility.reportTab;
+//            if(!$scope.$$phase){
+//                $scope.$apply();
+//            }
         });
         $scope.$on('afterJobStop',function(event){
             if(angular.isDefined($scope.job.Builds)){
-                $scope.historyTableParams.reload();
+                //$scope.historyTableParams.reload();
             };
         });
 
         $scope.$on('scrollReport',function(event,appendReport){
+            $scope.selectedTab = Utility.reportTab;
             $scope.scrollReport();
         });
 
         // ng-table params for history builds
-        $scope.historyTableParams=new ngTableParams(
-            {
-                page:1, // first page number
-                count:15, // count per page
-                sorting: {
-                    'Number':'desc'      // initial sorting
-                }
-            },
-            {   $scope:$scope,
-                showDefaultPagination:false,
-                counts: [], // hide the page size
-                getData: function($defer , params){
-                    var data =$scope.job.Builds.JobHistories;
-                    if(angular.isUndefined(data)||data==null){
-                        data=[];
-                    }
-                    params.total(data.length);
-                    params.count(data.length);
-                    $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
-                    //$defer.resolve(data);
-                }
-            }
-        );
+//        $scope.historyTableParams=new ngTableParams(
+//            {
+//                page:1, // first page number
+//                count:15, // count per page
+//                sorting: {
+//                    'Number':'desc'      // initial sorting
+//                }
+//            },
+//            {   $scope:$scope,
+//                showDefaultPagination:false,
+//                counts: [], // hide the page size
+//                getData: function($defer , params){
+//                    var data =$scope.job.Builds.JobHistories;
+//                    if(angular.isUndefined(data)||data==null){
+//                        data=[];
+//                    }
+//                    params.total(data.length);
+//                    params.count(data.length);
+//                    $defer.resolve(data.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+//                    //$defer.resolve(data);
+//                }
+//            }
+//        );
 
         var refreshHistoryTable = function(){
-            if(angular.isDefined($scope.historyTableParams) && $scope.job.Builds){
-                $scope.historyTableParams.reload();
+            if($scope.job.Builds){
+                var data = [];
+                angular.forEach($scope.job.Builds.JobHistories, function(build){
+                   data.push({
+                       'name' : build.FullDisplayName.replace($scope.job.JobName,'Build'),
+                       'time' : build.Id.split('_')[0].concat(" ").concat(build.Id.split('_')[1].split('-').join(":")),
+                       'duration' : build.Duration + "s",
+                       'result' : build.Result,
+                       'number' : build.Number
+                   });
+                });
+                $scope.jobHistoryBuilds = data;
             }
         }
 
@@ -234,8 +250,8 @@ define(['angular'], function(angular){
             if(angular.isUndefined(build)){
                 return;
             }
-            $scope.selectedBuildUrl =Restangular.one('jobs',$scope.job.JobName).one('report',build.Number).one('file').getRequestedUrl();
-            Restangular.one('jobs',$scope.job.JobName).one('report',build.Number).get({fields:'report'})
+            $scope.selectedBuildUrl =Restangular.one('jobs',$scope.job.JobName).one('report',build.number).one('file').getRequestedUrl();
+            Restangular.one('jobs',$scope.job.JobName).one('report',build.number).get({fields:'report'})
                 .then(function(jobData){
                     $scope.selectedBuildReport = jobData.Report;
                 });

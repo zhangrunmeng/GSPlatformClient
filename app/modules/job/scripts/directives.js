@@ -17,7 +17,7 @@ define(['angular',
                             var updateSize = function (evt, scale){
                                 var jobGridDiv = element.find("div[jobgrid]");
                                 jobGridDiv.css({
-                                    'height' : (scale.height - 230) + 'px',
+                                    'height' : (scale.height - 242) + 'px',
                                     'width' : '100%'
                                 });
                                 var oldMode = scope.mode;
@@ -51,14 +51,20 @@ define(['angular',
                         restrict: 'E',
                         link: function postLink(scope, element, attrs) {
                             scope.scrollReport= function (){
-                                var reportArea=  $('textarea[data-build=lastBuild]');
+                                var reportArea =  $('textarea[data-build=lastBuild]');
                                 reportArea.animate({
                                     scrollTop:reportArea[0].scrollHeight - reportArea.height()
                                 },2000);
                             };
-                            var updateSize = function(evt, scala){
-                                scope.scmSettingHeight = (scala.height - 550) + 'px'
-                                element.find("div[class='tab-content']").css('height', scala.height - 285 + 'px');
+                            var updateSize = function(evt, scale){
+                                var contentHeight =  scale.height - 285;
+                                element.find("div[class='tab-content']").css('height', contentHeight + 'px');
+                                scope.scmSettingHeight = (scale.height - 550) + 'px';
+                                element.find("div[role='tab-pane']").css('height', contentHeight + 'px');
+                                scope.reportTextHeight = contentHeight - 70 + 'px';
+                                //element.find("textarea[for='report']").css('height', contentHeight - 70 + 'px');
+                                element.find("textarea[for='config']").css('height', contentHeight - 70 + 'px');
+                                element.find("textarea[for='history']").css('height', contentHeight - 100 + 'px');
                             };
 
                             scope.$on('updateSize', updateSize);

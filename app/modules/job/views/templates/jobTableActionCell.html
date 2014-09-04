@@ -1,4 +1,4 @@
-<div class="action" ng-class="col.colIndex()" data-toggle="buttons">
+<div class="action ngCellText jobTableActionCell" ng-class="col.colIndex()" data-toggle="buttons">
     <label title="Start Job" class="btn btn-default btn-xs action" ng-class="{active:row.entity.Result=='Running'}" ng-click="$event.stopPropagation();">
         <input type="radio" name="style-a1" id="style-a1" ng-click="row.entity.Result!='Running'?jobStart([row.entity]):$event.stopPropagation();">
         <i class="fa fa-play action"></i>
