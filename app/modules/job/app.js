@@ -6,11 +6,12 @@ define(['angular',
        'uiBootstrap',
        'angularMessage',
        'angularGrid',
-       'gf/common/ngTableRenderer/ngTableRenderer',
+       '../common/ngTableRenderer/ngTableRenderer',
        './scripts/services',
        './scripts/controllers',
        './scripts/directives',
-       './scripts/filters'
+       './scripts/filters',
+       './lib/signalr/jquery.signalR-2.0.2'
     ], function(angular){
         return angular
             .module('jobManagement', [
@@ -25,7 +26,6 @@ define(['angular',
                 'job.services'
             ]).constant('serviceUrl','http://vhwebdevserver.eng.citrite.net')
             .constant('serviceUrl2', "http://localhost:61586/")
-            //http://vhwebdevserver.eng.citrite.net
             .config(function(RestangularProvider, serviceUrl){
                 RestangularProvider.setBaseUrl(serviceUrl+'/api/');
             });

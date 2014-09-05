@@ -5,7 +5,6 @@
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
     <title> GS Platform </title>
     <meta name="description" content="GS Platform of Citrix">
-    <meta name="author" content="t_yuejial">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- FAVICONS -->
@@ -31,11 +30,12 @@
   <body class="smart-style-3">
       <!-- possible classes: minified, fixed-ribbon, fixed-header, fixed-width-->
 
-        <div ng-controller="gsPlatformController" gs-platform style="width: 100%; height: 100%">
+        <div ng-controller="gsPlatformController" style="width: 100%; height: 100%">
           <div>
               <ul class="nav nav-pills pull-right">
-                  <li ng-class="{true: 'active', false: 'inactive'}[selectedModule == 'home']"><a ng-href="#" ng-click="selectedModule = 'home'">Home</a></li>
-                  <li ng-class="{true: 'active', false: 'inactive'}[selectedModule == 'job']"><a ng-href="#/job" ng-click="selectedModule = 'job'">Job</a></li>
+                  <li ng-repeat="module in $installedModules" ng-class="{true: 'active', false: 'inactive'}[selectedModule == module.id]">
+                      <a ng-href="{{'#/' + module.id}}" ng-click="selectModule(module)">{{module.name}}</a>
+                  </li>
               </ul>
               <h3 class="text-muted">GS Platform</h3>
           </div>

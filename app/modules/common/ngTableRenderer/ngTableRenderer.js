@@ -13,7 +13,7 @@ define(['angular',
             return {
                 restrict: 'E',
                 transclude: true,
-                templateUrl: 'gf/common/ngTableRenderer/table.html',
+                templateUrl: '..//ngTableRenderer/table.html',
                 link :  function (scope, element, attrs) {
                     var contentHeight = attrs.contentHeight;
                     try{

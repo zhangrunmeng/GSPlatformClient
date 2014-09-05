@@ -14,7 +14,7 @@ define(['angular'], function(angular){
                 });
             });
         })
-        .controller('JobDetailCtrl', function($scope, $element, Restangular, ngTableParams, Utility, $injector){
+        .controller('JobDetailCtrl', function($scope, $element, Restangular, Utility, $injector){
             require(['modules/job/scripts/controllers/jobDetail'], function(jobDetail){
                 $scope.jobHistoryBuilds = [];
                 $scope.totalBuilds = $scope.jobHistoryBuilds.length;
@@ -32,7 +32,6 @@ define(['angular'], function(angular){
                     '$scope': $scope,
                     '$element': $element,
                     'Restangular': Restangular,
-                    'ngTableParams' : ngTableParams,
                     'Utility' : Utility
                 });
             });

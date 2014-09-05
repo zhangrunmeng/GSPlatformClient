@@ -4,13 +4,8 @@
 define([], function(){
    return [
        {
-           'id' : "home",
-           'url' : "/",
-           'module' : "home"
-       },
-       {
            'id' : "job",
-           'url' : "/job",
+           'name' : "Job",
            'module' : "jobManagement"
        }
    ];

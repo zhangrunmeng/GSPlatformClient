@@ -368,7 +368,10 @@ define(['angular'], function(angular){
          });
 
          jobHubProxy.start();
-         $scope.loadJobsData();
+
+         if(!$scope.jobs || $scope.jobs.length == 0){
+             $scope.loadJobsData();
+         }
          //*/
         //$scope.onResize();
     }

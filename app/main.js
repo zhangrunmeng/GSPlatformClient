@@ -19,7 +19,7 @@ require.config({
         ngTableX: '../bower_components/ng-table-x/ng-table-x',
         pace: '../bower_components/pace/pace',
         restAngular : "../bower_components/restangular/dist/restangular",
-        signalR: '../bower_components/signalr/jquery.signalR-2.0.2',
+        //signalR: '../bower_components/signalr/jquery.signalR-2.0.2',
         uiBootstrap: '../bower_components/angular-bootstrap/ui-bootstrap-tpls',
         text: '../bower_components/requirejs-text/text'
     },
@@ -33,8 +33,7 @@ require.config({
             deps:['angular'],
             'exports':'angular.mock'
         },
-        'ngTableX' : ['angular'],
-        'signalR' : ['jquery']
+        'ngTableX' : ['angular']
     },
     priority: [
         "angular"
@@ -44,12 +43,11 @@ require.config({
 //http://code.angularjs.org/1.2.1/docs/guide/bootstrap#overview_deferred-bootstrap
 window.name = "NG_DEFER_BOOTSTRAP!";
 
-require( [
+require([
     'jquery',
     'angular',
     'angularRoute',
-    'installedModules',
-    'signalR'
+    'installedModules'
 ], function($, angular, angularRoute, installedModules) {
 
     var requireModuleList = [];
